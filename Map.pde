@@ -47,6 +47,11 @@ class Map {
                 tiles[x][y] = new Tile(new int[] {x, y}, this);
             }
         }
+        for (int y = 0; y < map_height; y++) {
+            for (int x = 0; x < map_width; x++) {
+                tiles[x][y].init_neighbours();
+            }
+        }
     }
 
     private void init_capitals() {
@@ -104,8 +109,7 @@ class Tile {
         this.tile_pos = pos;
         this.world_pos = new float[] {tile_pos[0] * x_tile_dis + (pos[1] % 2 == 1 ? x_tile_dis / 2 : 0), tile_pos[1] * y_tile_dis};
         this.map = map;
-        
-        init_neighbours();
+        this.neighbours = new Tile[6];
     }
 
     private void set_tile_pair_neighbours(Tile t, int i) {
@@ -114,18 +118,23 @@ class Tile {
     }
 
     private void init_neighbours() {
+        // example of config (xy)
+        // neighbour index starts at upper left
+        //  10  20  30  40
+        //    11  21  31
+        //      22  32
         neighbours = new Tile[6];
         int[] p = tile_pos;
+        int mw = map.map_width;
         if (p[1] != 0) {
             set_tile_pair_neighbours(map.tiles[p[0]][p[1]-1], p[1] % 2 == 0 ? 1 : 0);
-            if (p[1] % 2 == 1 && p[0] != map.map_width - 1)
-                set_tile_pair_neighbours(map.tiles[p[0]+1][p[1]-1], 1);
-            if (p[1] % 2 == 0 && p[0] != 0)
-            set_tile_pair_neighbours(map.tiles[p[0]-1][p[1]-1], 0);
+            if (p[1] % 2 == 1)
+                set_tile_pair_neighbours(map.tiles[(p[0]+1)%mw][p[1]-1], 1);
+            if (p[1] % 2 == 0)
+                set_tile_pair_neighbours(map.tiles[(p[0]-1+mw)%mw][p[1]-1], 0);
         }
         // else neighbours[0] = neighbours[1] = void_tile; // tile for edge of world
-        if (p[0] != 0)
-            set_tile_pair_neighbours(map.tiles[p[0]-1][p[1]], 5);
+        set_tile_pair_neighbours(map.tiles[(p[0]-1+mw)%mw][p[1]], 5);
     }
 
     public void draw_tile(float x, float y) {

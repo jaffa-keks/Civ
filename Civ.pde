@@ -14,8 +14,6 @@ void setup() {
 
   map = new Map(64, 48, civs);
 
-  //for (Tile t : map.tiles[2][1].neighbours)
-  //  println(t.tile_pos[0], t.tile_pos[1]);
 }
 
 void draw() {
@@ -32,6 +30,21 @@ void mouseDragged() {
     y_off += (pmouseY - mouseY) / zoom;
     y_off = constrain(y_off, 0, map.map_height_f - height / zoom);
   }
+}
+
+void mousePressed() {
+  Tile clicked = tile_at(world_point());
+  println(clicked.tile_pos[0], clicked.tile_pos[1]);
+}
+
+float[] world_point() {
+    return new float[] {(x_off + mouseX / zoom) % map.map_width_f, y_off + mouseY / zoom};
+}
+
+Tile tile_at(float[] world_pos) {
+  int ty = (int)(world_pos[1] / y_tile_dis + 0.5f);
+  int tx = (int)(world_pos[0] / x_tile_dis + (ty % 2 == 1 ? 0 : 0.5)) % map.map_width;
+  return map.tiles[tx][ty];
 }
 
 // FOR NOW EVERYONE PLAYS SIMULTANEOUSLY

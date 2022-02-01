@@ -8,6 +8,8 @@ class Civilization {
     ArrayList<Unit_Entity> units;
 
     Statistics_Block civilization_statistics, turn_stat_gain;
+    Map<Strategic_Resource, Integer> strategic_resources;
+    Map<Luxury_Resource, Integer> luxury_resources;
     Technology_Tree tech_tree;
 
     ArrayList<District_Type> districts_unlocked;
@@ -22,6 +24,8 @@ class Civilization {
         units = new ArrayList<Unit_Entity>();
 
         civilization_statistics = new Statistics_Block();
+        strategic_resources = new HashMap<Strategic_Resource, Integer>();
+        luxury_resources = new HashMap<Luxury_Resource, Integer>();
         tech_tree = new Technology_Tree();
 
         districts_unlocked = new ArrayList<District_Type>();

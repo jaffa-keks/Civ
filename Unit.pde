@@ -14,3 +14,7 @@ class Utility_Unit extends Unit {
 class Religion_Unit extends Unit {
     
 }
+
+class Trader extends Unit {
+    
+}

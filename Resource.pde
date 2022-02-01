@@ -1,5 +1,4 @@
 class Resource {
-    Tile tile;
 }
 
 class Bonus_Resource extends Resource {

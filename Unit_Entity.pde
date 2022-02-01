@@ -50,3 +50,9 @@ class Religion_Unit_Entity extends Unit_Entity {
         return t.religion_unit;
     }
 }
+
+class Trader_Unit_Entity extends Unit_Entity {
+    public void move_to_adjacent_tile(Tile t) {
+
+    }
+}

@@ -1,11 +1,10 @@
 class Statistic {
     int amount;
-
     String name;
     PImage icon;
 }
 
-class Statistics_Block {
+class Yield_Block {
     Statistic[] stats = new Statistic[] {
         new Food(),
         new Production(),
@@ -15,7 +14,16 @@ class Statistics_Block {
         new Culture()
     };
 
-    public void add(Statistics_Block s) {
+    public Yield_Block() {
+
+    }
+
+    public Yield_Block(int[] amounts) {
+        for (int i = 0; i < stats.length; i++)
+            stats[i].amount = amounts[i];
+    }
+
+    public void add(Yield_Block s) {
         for (int i = 0; i < stats.length; i++)
             stats[i].amount += s.stats[i].amount;
     }

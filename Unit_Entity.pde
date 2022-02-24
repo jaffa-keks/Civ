@@ -13,8 +13,8 @@ class Unit_Entity {
         // if (t instanceof UnpassableTile) <- Mountain, Volcano...
         Unit_Entity on_tile = same_type_unit_on_tile(t);
         if (on_tile == null) {
-            if (t.move_penalty <= move_left) {
-                move_left -= t.move_penalty;
+            if (t.move_penalty() <= move_left) {
+                move_left -= t.move_penalty();
                 tile = t;
                 // for multiplayer send unit moved
             }

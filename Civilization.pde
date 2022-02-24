@@ -7,9 +7,9 @@ class Civilization {
     ArrayList<City> cities;
     ArrayList<Unit_Entity> units;
 
-    Statistics_Block civilization_statistics, turn_stat_gain;
-    Map<Strategic_Resource, Integer> strategic_resources;
-    Map<Luxury_Resource, Integer> luxury_resources;
+    Yield_Block civilization_stats, turn_stat_gain;
+    java.util.Map<Strategic_Resource, Integer> strategic_resources;
+    java.util.Map<Luxury_Resource, Integer> luxury_resources;
     Technology_Tree tech_tree;
 
     ArrayList<District_Type> districts_unlocked;
@@ -23,7 +23,7 @@ class Civilization {
         cities = new ArrayList<City>();
         units = new ArrayList<Unit_Entity>();
 
-        civilization_statistics = new Statistics_Block();
+        civilization_stats = new Yield_Block();
         strategic_resources = new HashMap<Strategic_Resource, Integer>();
         luxury_resources = new HashMap<Luxury_Resource, Integer>();
         tech_tree = new Technology_Tree();
@@ -35,11 +35,11 @@ class Civilization {
     }
 
     public void on_turn_start() {
-        turn_stat_gain = new Statistics_Block();
+        turn_stat_gain = new Yield_Block();
 
         for (City c : cities) {
             c.on_turn_start();
-            civilization_statistics.add(c.turn_gain);
+            civilization_stats.add(c.turn_gain);
             turn_stat_gain.add(c.turn_gain);
         }
         for (Unit_Entity u : units)

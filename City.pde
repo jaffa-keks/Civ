@@ -12,7 +12,7 @@ class City {
     int city_size;
     int food_acc, production_acc, culture_acc;
     Tile acquire_next;
-    Statistics_Block turn_gain;
+    Yield_Block turn_gain;
 
     public City(String name, Civilization civ, Tile tile) {
         this.name = name;
@@ -33,7 +33,7 @@ class City {
     }
 
     public void on_turn_start() {
-        turn_gain = new Statistics_Block();
+        turn_gain = new Yield_Block();
         turn_gain.add(citizen_gain());
         turn_gain.add(district_gain());
         produce(turn_gain.stats[1].amount);
@@ -42,8 +42,8 @@ class City {
     }
 
     // for each citizen add worked tiles resources to city/civ
-    Statistics_Block citizen_gain() {
-        Statistics_Block acc = new Statistics_Block();
+    Yield_Block citizen_gain() {
+        Yield_Block acc = new Yield_Block();
         for (Citizen c : citizens)
             acc.add(c.worked.tile_stats);
         // also add bonuses for citizens working in districts (probably by increasing district stats_block for each citizen working there)
@@ -51,8 +51,8 @@ class City {
         return acc;
     };
 
-    Statistics_Block district_gain() {
-        Statistics_Block acc = new Statistics_Block();
+    Yield_Block district_gain() {
+        Yield_Block acc = new Yield_Block();
         for (District d : districts)
             acc.add(d.district_gain());
         return acc;
@@ -148,7 +148,7 @@ class District {
         this.city = tile.city;
     }
 
-    public Statistics_Block district_gain() {
+    public Yield_Block district_gain() {
         return district_type.district_gain(this);
     }
 }
@@ -160,10 +160,10 @@ class Building {
 // __________ DISTRICT TYPES ____________
 
 class District_Type {
-    Statistics_Block base_stats;
+    Yield_Block base_stats;
     ArrayList<Building> district_buildings;
 
-    Statistics_Block district_gain(District d) {
+    Yield_Block district_gain(District d) {
         return null;
         //base + adjacency + buildings + citizens_working
     }

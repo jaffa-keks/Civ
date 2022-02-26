@@ -40,11 +40,50 @@ class Map {
         init_capitals();
     }
 
+    public Map(String path) {
+        PImage map_data = loadImage(path + "/mapdata.png");
+
+        this.map_width = map_data.width;
+        this.map_height = map_data.height;
+        this.map_width_f = map_width * x_tile_dis;
+        this.map_height_f = map_height * y_tile_dis;
+        tiles = new Tile[map_width][map_height];
+
+        load_map(map_data);
+
+        // LOAD CIVILIZATIONS/PLAYERS FROM FILE
+        // this.civs = civs;
+        // player_num = civs.length;
+        // init_capitals();
+    }
+
+    private void load_map(PImage map_data) {
+        for (int y = 0; y < map_data.height; y++) {
+            for (int x = 0; x < map_data.width; x++) {
+                int bt_id = map_data.pixels[x+y*map_data.width] & SERIAL_SELECT_BASE_TERRAIN;
+                tiles[x][y] = new Tile(new int[] {x, y}, this, (Base_Terrain)BASE_TERRAINS.get(bt_id), null);
+            }
+        }
+    }
+
     private void map_gen() {
+        noiseDetail(1);
+        float s = 0.14;
         // replace this sometime with good world generator
         for (int y = 0; y < map_height; y++) {
             for (int x = 0; x < map_width; x++) {
                 tiles[x][y] = new Tile(new int[] {x, y}, this);
+                int temp = tiles[x][y].temp = (int)ceil(heat_function(y));
+                int precip = tiles[x][y].precip = (int)(noise(x*s, y*s)*100) / 15;
+            }
+        }
+        s = 0.17;
+        noiseDetail(32, 0.32);
+        for (int y = 0; y < map_height; y++) {
+            for (int x = 0; x < map_width; x++) {
+                int height = tiles[x][y].height = (int)(noise(x*s, y*s)*5);
+                tiles[x][y].tile_col = color(tiles[x][y].temp*80, tiles[x][y].precip*80, height*80);
+                if (height >= 3) println("Mountain", x, y);
             }
         }
         for (int y = 0; y < map_height; y++) {
@@ -74,6 +113,7 @@ class Map {
     }
 
     public void draw_map(float x_off, float y_off) {
+        imageMode(CENTER);
         int x_start = (int)(x_off / x_tile_dis);
         int y_start = (int)(y_off / y_tile_dis);
         int y_max = min(screen_height_tiles, map_height - y_start);
@@ -83,4 +123,10 @@ class Map {
             }
         }
     }
+
+    private float heat_function(float y) {
+        float a = 0.77, b = -0.6;
+        return 3*exp(-pow(abs(y-map_height/2),a)*pow(map_height, b));
+    }
+
 }

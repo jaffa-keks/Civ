@@ -2,24 +2,28 @@ float x_off, y_off;
 float zoom = 1;
 Map map;
 
+float minimap_x=0, minimap_y=500, minimap_scale=1;
+
 void setup() {
-  size(1280, 720);
+  size(1280, 720, P2D);
   screen_width_tiles = (int)(width / x_tile_dis) + 2;
   screen_height_tiles = (int)(height / y_tile_dis) + 2;
+  load_base_terrains();
 
   frameRate(30);
   Civilization[] civs = new Civilization[] {
     new Civilization("Yugoslavia")
   };
 
-  map = new Map(64, 48, civs);
-
+  // map = new Map(64, 48, civs);
+  map = new Map("maps/earth");
 }
 
 void draw() {
   background(0xffcccccc);
   //add zoom here maybe | scale(zoom);
   map.draw_map(x_off, y_off);
+  render_minimap();
   //render ui
 }
 
@@ -49,3 +53,17 @@ Tile tile_at(float[] world_pos) {
 
 // FOR NOW EVERYONE PLAYS SIMULTANEOUSLY
 // IMPLEMENT WHEN IN WAR ORDER OF TURNS FOR CIV
+
+void render_minimap() {
+  stroke(0);
+  strokeWeight(4);
+  noFill();
+  rect(minimap_x, minimap_y, map.map_width*minimap_scale, map.map_height*minimap_scale);
+  strokeWeight(2);
+  for (int y = 0; y < map.map_height; y++) {
+    for (int x = 0; x < map.map_width; x++) {
+      stroke(map.tiles[x][y].tile_col);
+      point(minimap_x + 2 + x*minimap_scale, minimap_y + 2 + y*minimap_scale);
+    }
+  }
+}
